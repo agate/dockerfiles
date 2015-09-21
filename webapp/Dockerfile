@@ -21,13 +21,16 @@ RUN rm -f /etc/service/nginx/down
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ADD bootstrap.sh /etc/my_init.d/001_bootstrap.sh
-ADD nginx-default-site /etc/nginx/sites-enabled/default
 ADD ssh-config $HOME/.ssh/config
 ADD ssh-config /home/app/.ssh/config
+ADD nginx-default-site /etc/nginx/sites-enabled/default
+ADD bootstrap.sh /etc/my_init.d/001_bootstrap.sh
+ADD custom_bootstrap.sh /etc/my_init.d/099_custom_bootstrap.sh
+
+RUN chmod +x /etc/my_init.d/001_bootstrap.sh
+RUN chmod +x /etc/my_init.d/099_custom_bootstrap.sh
 
 RUN mkdir /home/app/webapp
 RUN chown app:app /home/app/.ssh/config /home/app/webapp
-RUN chmod +x /etc/my_init.d/001_bootstrap.sh
 
 EXPOSE 80
